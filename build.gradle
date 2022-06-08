@@ -1,0 +1,205 @@
+import java.time.LocalDateTime
+
+
+
+
+plugins {
+    id 'io.spring.dependency-management' version '1.0.9.RELEASE'
+
+}
+
+apply from: "$rootDir/dependencies.gradle"
+
+allprojects {
+    apply plugin: 'io.spring.dependency-management'
+    apply plugin: 'java-library'
+
+
+    group = 'cn.com.do1.conductor'
+    version = "0.0.1-SNAPSHOT"
+
+
+
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
+
+    repositories {
+        mavenLocal()
+        maven {
+            allowInsecureProtocol true
+            url "http://dqdp.do1.com.cn/mvnrepository/content/groups/public/"
+        }
+        maven { url "https://maven.aliyun.com/repository/public" }
+        maven { url "https://plugins.gradle.org/m2/" }
+        mavenCentral()
+    }
+
+    dependencyManagement {
+        imports {
+            mavenBom("org.springframework.boot:spring-boot-dependencies:2.3.12.RELEASE")
+        }
+    }
+
+    dependencies {
+
+    }
+}
+
+
+description = "do1-cloud conductor extend"
+
+
+subprojects {
+    apply plugin: 'java-library'
+    apply plugin: 'signing'
+    apply plugin: 'maven-publish'
+    apply plugin: "io.freefair.lombok"
+
+
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
+
+    repositories {
+        mavenLocal()
+        maven {
+            allowInsecureProtocol true
+            url "http://dqdp.do1.com.cn/mvnrepository/content/groups/public/"
+        }
+        maven { url "https://maven.aliyun.com/repository/public" }
+		maven { url "https://plugins.gradle.org/m2/" }
+		mavenCentral()
+    }
+
+    dependencies {
+        
+    }
+
+    tasks.withType(JavaCompile) {
+        options.encoding = 'UTF-8'
+        options.warnings = false
+        options.deprecation = true
+        options.compilerArgs += ["-parameters"]
+    }
+
+    tasks.withType(GenerateModuleMetadata) {
+        enabled = false
+    }
+
+    jar {
+        into("META-INF/") {
+
+        }
+        into("META-INF/maven/$project.group/$project.name") {
+            from { generatePomFileForMavenJavaPublication }
+            rename ".*", "pom.xml"
+        }
+        afterEvaluate {
+            manifest {
+                attributes 'Implementation-Title': archiveBaseName
+                attributes 'Implementation-Version': archiveVersion
+                attributes 'Built-Gradle': gradle.gradleVersion
+                attributes 'Bundle-DocURL': 'https://www.do1.com.cn/'
+                attributes 'Build-OS': System.getProperty("os.name")
+                attributes 'Built-By': System.getProperty("user.name")
+                attributes 'Build-Jdk': System.getProperty("java.version")
+                attributes 'Build-Timestamp': LocalDateTime.now().format("yyyy-MM-dd HH:mm:ss")
+            }
+        }
+    }
+
+    test {
+        dependsOn("cleanTest", "generatePomFileForMavenJavaPublication")
+        useJUnitPlatform()
+    }
+
+    //noinspection GroovyAssignabilityCheck
+    task sourcesJar(type: Jar) {
+        archiveClassifier = 'sources'
+        from sourceSets.main.allSource
+    }
+
+    javadoc {
+        afterEvaluate {
+            configure(options) {
+                encoding "UTF-8"
+                charSet 'UTF-8'
+                author true
+                version true
+                failOnError false
+                links "http://docs.oracle.com/javase/8/docs/api"
+            }
+        }
+    }
+
+
+
+    task javadocJar(type: Jar) {
+        archiveClassifier = 'javadoc'
+        from javadoc
+    }
+
+    tasks.whenTaskAdded { task ->
+        if (task.name.contains('signMavenJavaPublication')) {
+            task.enabled = new File(project.property('signing.secretKeyRingFile') as String).isFile()
+        }
+    }
+
+    publishing {
+        repositories {
+            maven {
+                def userName = System.getProperty("un")
+                def passWord = System.getProperty("ps")
+                def releasesRepoUrl = "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
+                def snapshotsRepoUrl = "https://oss.sonatype.org/content/repositories/snapshots/"
+                url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
+
+                credentials {
+                    username userName
+                    password passWord
+                }
+            }
+        }
+        publications {
+
+            mavenJava(MavenPublication) {
+                from components.java
+
+                artifact sourcesJar
+                artifact javadocJar
+
+                pom {
+                    name = 'dsf-data'
+                    packaging 'jar'
+                    description = '道一服务框架数据服务'
+                    url = 'http://wwww.do1.com.cn'
+
+
+                    developers {
+                        developer {
+                            id = 'do1'
+                            name = 'zengxc'
+                            email = 'zengxc@foxmail.com'
+                        }
+                    }
+
+                    withXml {
+                        def root = asNode()
+                        root.dependencies.'*'.findAll {
+                            def d = it
+                            d.scope.text() == 'runtime' && project.configurations.findByName("implementation").allDependencies.find { dep ->
+                                dep.name == it.artifactId.text()
+                            }.each() {
+                                d.scope*.value = 'compile'
+                                d.appendNode('optional', true)
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        signing {
+            sign publishing.publications.mavenJava
+        }
+    }
+}

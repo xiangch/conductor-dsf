@@ -1,0 +1,17 @@
+dependencies {
+    implementation "com.sun.jersey:jersey-client:${revJersey}"
+    implementation "com.netflix.conductor:conductor-common:${revConductor}"
+    implementation "com.netflix.conductor:conductor-core:${revConductor}"
+    implementation "com.netflix.conductor:conductor-client:${revConductor}"
+    implementation "com.google.guava:guava:${revGuava}"
+
+    compileOnly 'org.springframework.boot:spring-boot-starter'
+    compileOnly 'org.springframework.boot:spring-boot-starter-web'
+    compileOnly "com.alibaba:fastjson:${revFastJson}"
+
+
+    implementation 'org.springframework.boot:spring-boot-starter'
+}
+
+
+

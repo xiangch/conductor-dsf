@@ -1,0 +1,9 @@
+/*
+ * Common place to define all the version dependencies
+ */
+ext {
+    revConductor = '3.8.1'
+    revFastJson = '1.2.79'
+    revGuava = '30.0-jre'
+    revJersey = '1.19.4'
+}
