@@ -37,7 +37,9 @@ allprojects {
     dependencyManagement {
         imports {
             mavenBom("org.springframework.boot:spring-boot-dependencies:2.3.12.RELEASE")
+            //mavenBom("org.springframework.cloud:spring-cloud-dependencies:Hoxton.SR8")
         }
+
     }
 
     dependencies {
@@ -71,7 +73,7 @@ subprojects {
     }
 
     dependencies {
-        
+
     }
 
     tasks.withType(JavaCompile) {

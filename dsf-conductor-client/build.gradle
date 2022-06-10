@@ -7,6 +7,7 @@ dependencies {
 
     compileOnly 'org.springframework.boot:spring-boot-starter'
     compileOnly 'org.springframework.boot:spring-boot-starter-web'
+    compileOnly 'cn.com.do1.vajra:vajra-rt-dsf-feign:2.2.1-SNAPSHOT'
     compileOnly "com.alibaba:fastjson:${revFastJson}"
 
 

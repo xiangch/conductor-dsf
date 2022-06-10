@@ -1,2 +1,3 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
   cn.com.do1.conductor.client.spring.ConductorDiscoveryClientAutoConfiguration
+
