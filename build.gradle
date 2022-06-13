@@ -151,10 +151,10 @@ subprojects {
             maven {
                 def userName = System.getProperty("un")
                 def passWord = System.getProperty("ps")
-                def releasesRepoUrl = "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
-                def snapshotsRepoUrl = "https://oss.sonatype.org/content/repositories/snapshots/"
+                def releasesRepoUrl = "http://dqdp.do1.com.cn/mvnrepository/content/repositories/releases/"
+                def snapshotsRepoUrl = "http://dqdp.do1.com.cn/mvnrepository/content/repositories/snapshots/"
                 url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
-
+                allowInsecureProtocol true
                 credentials {
                     username userName
                     password passWord
@@ -170,15 +170,15 @@ subprojects {
                 artifact javadocJar
 
                 pom {
-                    name = 'dsf-data'
+                    name = 'dsf-conductor'
                     packaging 'jar'
-                    description = '道一服务框架数据服务'
+                    description = '道一云服务框架conductor扩展包'
                     url = 'http://wwww.do1.com.cn'
 
 
                     developers {
                         developer {
-                            id = 'do1'
+                            id = 'do1-cloud'
                             name = 'zengxc'
                             email = 'zengxc@foxmail.com'
                         }

@@ -17,11 +17,8 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
-import org.springframework.stereotype.Component;
-import org.springframework.web.client.RestTemplate;
 
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -31,9 +28,8 @@ import java.util.List;
  * @author zengxc
  */
 @Configuration(proxyBeanMethods = false)
-@EnableFeignClients(basePackages = "cn.com.do1.conductor.client.discovery")
-@ComponentScan(basePackages = "cn.com.do1.conductor.client.discovery")
 @EnableConfigurationProperties(ClientProperties.class)
+@EnableFeignClients(clients = {TaskFeignClient.class,WorkflowFeignClient.class,MetadataFeignClient.class})
 public class ConductorDiscoveryClientAutoConfiguration {
 
 
@@ -89,7 +85,7 @@ public class ConductorDiscoveryClientAutoConfiguration {
     }
 
     @Bean
-    public DiscoveryMetadataClient workflowClient(MetadataFeignClient feignClient) {
+    public DiscoveryMetadataClient metadataClient(MetadataFeignClient feignClient) {
         return new DiscoveryMetadataClient(feignClient);
     }
 
