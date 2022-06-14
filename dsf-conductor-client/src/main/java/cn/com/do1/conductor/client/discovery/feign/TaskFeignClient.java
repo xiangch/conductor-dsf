@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 /**
  * @author zengxc
  */
-@FeignClient(name = "conductor", contextId = "TaskFeignClient", url = "${conductor.client.rootUri:}", fallback = TaskFeignClientHystrix.class)
+@FeignClient(name = "conductor", contextId = "Conductor.TaskFeignClient", url = "${conductor.client.rootUri:}", fallback = TaskFeignClientHystrix.class)
 public interface TaskFeignClient {
 
     String PREFIX_PATH = "/api/tasks";

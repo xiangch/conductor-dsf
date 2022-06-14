@@ -1,7 +1,6 @@
 package cn.com.do1.conductor.client.discovery.feign;
 
 import cn.com.do1.conductor.client.discovery.feign.hystrix.MetadataFeignClientHystrix;
-import cn.com.do1.conductor.client.discovery.feign.hystrix.TaskFeignClientHystrix;
 import com.netflix.conductor.common.metadata.workflow.WorkflowDef;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.MediaType;
@@ -13,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 /**
  * @author zengxc
  */
-@FeignClient(name = "conductor", contextId = "MetadataFeignClient", url = "${conductor.client.rootUri:}", fallback = MetadataFeignClientHystrix.class)
+@FeignClient(name = "conductor", contextId = "Conductor.MetadataFeignClient", url = "${conductor.client.rootUri:}", fallback = MetadataFeignClientHystrix.class)
 public interface MetadataFeignClient {
     String PREFIX_PATH = "/api/metadata";
 

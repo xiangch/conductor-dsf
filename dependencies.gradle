@@ -2,6 +2,9 @@
  * Common place to define all the version dependencies
  */
 ext {
+    configuration = [
+        javaVersion = JavaVersion.VERSION_1_8
+    ]
     revConductor = '3.8.1'
     revFastJson = '1.2.79'
     revGuava = '30.0-jre'

@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 /**
  * @author zengxc
  */
-@FeignClient(name = "conductor", contextId = "WorkflowFeignClient", url = "${conductor.client.rootUri:}", fallback = WorkflowFeignClientHystrix.class)
+@FeignClient(name = "conductor", contextId = "Conductor.WorkflowFeignClient", url = "${conductor.client.rootUri:}", fallback = WorkflowFeignClientHystrix.class)
 public interface WorkflowFeignClient {
     String PREFIX_PATH = "/api/workflow";
 

@@ -1,13 +1,11 @@
 package cn.com.do1.conductor.client.discovery;
 
 import cn.com.do1.conductor.client.discovery.feign.TaskFeignClient;
-import com.alibaba.fastjson.JSONObject;
 import com.google.common.base.Preconditions;
 import com.netflix.conductor.client.http.TaskClient;
 import com.netflix.conductor.common.metadata.tasks.Task;
 import com.netflix.conductor.common.metadata.tasks.TaskResult;
 import org.springframework.util.StringUtils;
-import org.springframework.web.client.RestTemplate;
 
 import java.util.Optional;
 
