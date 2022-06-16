@@ -29,7 +29,6 @@ import java.util.List;
  */
 @Configuration(proxyBeanMethods = false)
 @EnableConfigurationProperties(ClientProperties.class)
-@EnableFeignClients(basePackages = "cn.com.do1.conductor.client.discovery.feign")
 public class ConductorDiscoveryClientAutoConfiguration {
 
 

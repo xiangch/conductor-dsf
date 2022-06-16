@@ -16,7 +16,7 @@ allprojects {
 
 
     group = 'cn.com.do1.conductor'
-    version = "0.0.1-SNAPSHOT"
+    version = "3.8.1"
 
 
 
