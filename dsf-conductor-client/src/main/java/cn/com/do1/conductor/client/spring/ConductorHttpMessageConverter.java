@@ -4,10 +4,11 @@ import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
 import org.springframework.http.MediaType;
 
 import java.lang.reflect.Type;
-import java.util.HashSet;
-import java.util.Set;
+
 
 /**
+ * conductor 专属 Converter。避免污染其它业务。
+ *
  * @author zengxc
  */
 public class ConductorHttpMessageConverter extends FastJsonHttpMessageConverter {
@@ -17,19 +18,13 @@ public class ConductorHttpMessageConverter extends FastJsonHttpMessageConverter 
 
     @Override
     public boolean canRead(Type type, Class<?> contextClass, MediaType mediaType) {
-        if (type.getTypeName().startsWith(conductorPackage)) {
-            return super.canRead(type, contextClass, mediaType);
-        }
-        return false;
+        return type.getTypeName().startsWith(conductorPackage) ? super.canRead(type, contextClass, mediaType) : false;
 
     }
 
     @Override
     public boolean canWrite(Type type, Class<?> clazz, MediaType mediaType) {
-        if (type.getTypeName().startsWith(conductorPackage)) {
-            return super.canWrite(type, clazz, mediaType);
-        }
-        return false;
+        return type.getTypeName().startsWith(conductorPackage) ? super.canWrite(type, clazz, mediaType) : false;
     }
 
 
