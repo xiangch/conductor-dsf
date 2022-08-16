@@ -6,7 +6,10 @@ import com.google.common.base.Preconditions;
 import com.netflix.conductor.client.exception.ConductorClientException;
 import com.netflix.conductor.client.telemetry.MetricsContainer;
 import com.netflix.conductor.common.metadata.workflow.StartWorkflowRequest;
+import com.netflix.conductor.common.run.SearchResult;
+import com.netflix.conductor.common.run.TaskSummary;
 import com.netflix.conductor.common.run.Workflow;
+import com.netflix.conductor.common.run.WorkflowSummary;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 
@@ -56,4 +59,20 @@ public class DiscoveryWorkflowClient {
             feign.getWorkflow(workflowId, includeTasks);
         return workflow;
     }
+
+    /**
+     * Paginated search for workflows based on payload
+     *
+     * @param start start value of page
+     * @param size number of workflows to be returned
+     * @param sort sort order
+     * @param freeText additional free text query
+     * @param query the search query
+     * @return the {@link SearchResult} containing the {@link WorkflowSummary} that match the query
+     */
+    public SearchResult<WorkflowSummary> search(
+        Integer start, Integer size, String sort, String freeText, String query) {
+        return feign.search(start,size,sort,freeText,query);
+    }
+
 }
