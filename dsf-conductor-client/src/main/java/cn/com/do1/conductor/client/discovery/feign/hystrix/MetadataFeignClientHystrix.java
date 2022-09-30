@@ -18,4 +18,9 @@ public class MetadataFeignClientHystrix implements MetadataFeignClient {
     public void unregisterWorkflowDef(String name, Integer version) {
 
     }
+
+    @Override
+    public WorkflowDef getWorkflowDef(String name, Integer version) {        
+        return null;
+    }
 }

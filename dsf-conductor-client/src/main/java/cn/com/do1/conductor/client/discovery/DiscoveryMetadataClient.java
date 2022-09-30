@@ -4,13 +4,11 @@ package cn.com.do1.conductor.client.discovery;
 import cn.com.do1.conductor.client.discovery.feign.MetadataFeignClient;
 import com.google.common.base.Preconditions;
 import com.netflix.conductor.common.metadata.workflow.WorkflowDef;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 
 /**
  * @author zengxc
  */
-@Slf4j
 public class DiscoveryMetadataClient {
     private MetadataFeignClient feign;
 
@@ -28,5 +26,10 @@ public class DiscoveryMetadataClient {
     public void registerWorkflowDef(WorkflowDef workflowDef) {
         Preconditions.checkNotNull(workflowDef, "Workflow definition cannot be null");
         feign.registerWorkflowDef(workflowDef);
+    }
+
+    public WorkflowDef getWorkflowDef(String name,Integer version){
+        Preconditions.checkNotNull(name, "name  cannot be null");
+        return feign.getWorkflowDef(name,version);
     }
 }

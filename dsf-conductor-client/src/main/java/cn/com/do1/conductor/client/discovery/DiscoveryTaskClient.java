@@ -5,7 +5,6 @@ import com.google.common.base.Preconditions;
 import com.netflix.conductor.client.http.TaskClient;
 import com.netflix.conductor.common.metadata.tasks.Task;
 import com.netflix.conductor.common.metadata.tasks.TaskResult;
-import io.seata.core.context.RootContext;
 import org.springframework.util.StringUtils;
 
 import java.util.Optional;
