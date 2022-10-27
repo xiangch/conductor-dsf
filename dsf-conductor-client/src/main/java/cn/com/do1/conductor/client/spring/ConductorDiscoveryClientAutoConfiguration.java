@@ -15,10 +15,12 @@ import com.netflix.conductor.client.worker.Worker;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.event.EventListener;
 import org.springframework.http.MediaType;
 
 import java.nio.charset.StandardCharsets;
@@ -36,6 +38,7 @@ public class ConductorDiscoveryClientAutoConfiguration {
 
     @Autowired(required = false)
     private List<Worker> workers = new ArrayList<>();
+
 
     @Bean
     public TaskClient taskClient(TaskFeignClient feignClient) {
@@ -86,7 +89,7 @@ public class ConductorDiscoveryClientAutoConfiguration {
     }
 
 
-    @Bean(initMethod = "init", destroyMethod = "shutdown")
+    @Bean(destroyMethod = "shutdown")
     public TaskRunnerConfigurer taskRunnerConfigurer(
         TaskClient taskClient, ClientProperties clientProperties) {
         return new TaskRunnerConfigurer.Builder(taskClient, workers)
@@ -98,4 +101,5 @@ public class ConductorDiscoveryClientAutoConfiguration {
             .withShutdownGracePeriodSeconds(clientProperties.getShutdownGracePeriodSeconds())
             .build();
     }
+
 }
