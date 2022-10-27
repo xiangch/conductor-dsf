@@ -10,6 +10,7 @@ import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.alibaba.fastjson.support.config.FastJsonConfig;
 
 import com.netflix.conductor.client.automator.TaskRunnerConfigurer;
+import com.netflix.conductor.client.config.ConductorClientConfiguration;
 import com.netflix.conductor.client.http.TaskClient;
 import com.netflix.conductor.client.worker.Worker;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,8 +42,8 @@ public class ConductorDiscoveryClientAutoConfiguration {
 
 
     @Bean
-    public TaskClient taskClient(TaskFeignClient feignClient) {
-        return new DiscoveryTaskClient(feignClient);
+    public TaskClient taskClient(TaskFeignClient feignClient, ClientProperties clientProperties) {
+        return new DiscoveryTaskClient(feignClient,clientProperties);
     }
 
     @Bean

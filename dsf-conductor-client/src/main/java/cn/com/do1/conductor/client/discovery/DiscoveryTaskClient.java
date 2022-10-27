@@ -2,9 +2,12 @@ package cn.com.do1.conductor.client.discovery;
 
 import cn.com.do1.conductor.client.discovery.feign.TaskFeignClient;
 import com.google.common.base.Preconditions;
+import com.netflix.conductor.client.config.ConductorClientConfiguration;
+import com.netflix.conductor.client.config.DefaultConductorClientConfiguration;
 import com.netflix.conductor.client.http.TaskClient;
 import com.netflix.conductor.common.metadata.tasks.Task;
 import com.netflix.conductor.common.metadata.tasks.TaskResult;
+import com.sun.jersey.api.client.config.DefaultClientConfig;
 import org.springframework.util.StringUtils;
 
 import java.util.Optional;
@@ -18,8 +21,8 @@ public class DiscoveryTaskClient extends TaskClient {
     private TaskFeignClient feign;
 
 
-    public DiscoveryTaskClient(TaskFeignClient feign) {
-        super();
+    public DiscoveryTaskClient(TaskFeignClient feign, ConductorClientConfiguration conductorClientConfiguration) {
+        super(new DefaultClientConfig(),conductorClientConfiguration,null);
         this.feign = feign;
     }
 

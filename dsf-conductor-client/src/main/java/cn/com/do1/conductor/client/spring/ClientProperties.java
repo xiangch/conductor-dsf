@@ -12,6 +12,7 @@
  */
 package cn.com.do1.conductor.client.spring;
 
+import com.netflix.conductor.client.config.ConductorClientConfiguration;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 import java.time.Duration;
@@ -19,7 +20,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @ConfigurationProperties("conductor.client")
-public class ClientProperties {
+public class ClientProperties implements ConductorClientConfiguration {
 
     private String rootUri;
 
@@ -99,5 +100,47 @@ public class ClientProperties {
 
     public void setTaskThreadCount(Map<String, Integer> taskThreadCount) {
         this.taskThreadCount = taskThreadCount;
+    }
+
+
+    private boolean externalPayloadStorageEnabled=false;
+    private int taskOutputPayload=3072;
+    private int workflowInputPayload=5120;
+
+    @Override
+    public int getWorkflowInputPayloadThresholdKB() {
+        return workflowInputPayload;
+    }
+
+    @Override
+    public int getWorkflowInputMaxPayloadThresholdKB() {
+        return 10240;
+    }
+
+    @Override
+    public int getTaskOutputPayloadThresholdKB() {
+        return taskOutputPayload;
+    }
+
+    @Override
+    public int getTaskOutputMaxPayloadThresholdKB() {
+        return 10240;
+    }
+
+    @Override
+    public boolean isExternalPayloadStorageEnabled() {
+        return externalPayloadStorageEnabled;
+    }
+
+    public void setExternalPayloadStorageEnabled(boolean externalPayloadStorageEnabled){
+        this.externalPayloadStorageEnabled = externalPayloadStorageEnabled;
+    }
+
+    public void setTaskOutputPayload(int taskOutputPayload){
+        this.taskOutputPayload =taskOutputPayload;
+    }
+
+    public void setWorkflowInputPayload(int workflowInputPayload){
+        this.workflowInputPayload =workflowInputPayload;
     }
 }
