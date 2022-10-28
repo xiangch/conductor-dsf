@@ -3,6 +3,7 @@ package cn.com.do1.conductor.client.discovery.feign;
 import cn.com.do1.conductor.client.discovery.feign.hystrix.TaskFeignClientHystrix;
 import com.netflix.conductor.common.metadata.tasks.Task;
 import com.netflix.conductor.common.metadata.tasks.TaskResult;
+import com.netflix.conductor.common.run.ExternalStorageLocation;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -20,4 +21,9 @@ public interface TaskFeignClient {
 
     @PostMapping(value = PREFIX_PATH + "/", consumes = MediaType.APPLICATION_JSON_VALUE)
     void updateTask(@RequestBody TaskResult result);
+
+    @GetMapping(PREFIX_PATH + "/externalstoragelocation")
+    ExternalStorageLocation externalstoragelocation(@RequestParam("path") String path,
+                                                    @RequestParam("operation") String operation,
+                                                    @RequestParam("payloadType") String payloadType);
 }
