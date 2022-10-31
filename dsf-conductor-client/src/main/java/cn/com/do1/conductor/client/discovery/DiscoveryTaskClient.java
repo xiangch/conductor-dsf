@@ -41,7 +41,51 @@ public class DiscoveryTaskClient extends TaskClient {
         Task task = Optional.ofNullable(
             feign.pollTask(taskType, workerId, domain)
         ).orElse(new Task());
+        populateTaskPayloads(task);
         return task;
+    }
+
+    private void populateTaskPayloads(Task task) {
+        if (org.apache.commons.lang.StringUtils.isNotBlank(task.getExternalInputPayloadStoragePath())) {
+            MetricsContainer.incrementExternalPayloadUsedCount(
+                task.getTaskDefName(),
+                ExternalPayloadStorage.Operation.READ.name(),
+                ExternalPayloadStorage.PayloadType.TASK_INPUT.name());
+            task.setInputData(
+                downloadFromExternalStorage(
+                    ExternalPayloadStorage.PayloadType.TASK_INPUT,
+                    task.getExternalInputPayloadStoragePath()));
+            task.setExternalInputPayloadStoragePath(null);
+        }
+        if (org.apache.commons.lang.StringUtils.isNotBlank(task.getExternalOutputPayloadStoragePath())) {
+            MetricsContainer.incrementExternalPayloadUsedCount(
+                task.getTaskDefName(),
+                ExternalPayloadStorage.Operation.READ.name(),
+                ExternalPayloadStorage.PayloadType.TASK_OUTPUT.name());
+            task.setOutputData(
+                downloadFromExternalStorage(
+                    ExternalPayloadStorage.PayloadType.TASK_OUTPUT,
+                    task.getExternalOutputPayloadStoragePath()));
+            task.setExternalOutputPayloadStoragePath(null);
+        }
+    }
+
+    @Override
+    public Map<String, Object> downloadFromExternalStorage(
+        ExternalPayloadStorage.PayloadType payloadType, String path) {
+        Preconditions.checkArgument(org.apache.commons.lang.StringUtils.isNotBlank(path), "uri cannot be blank");
+        ExternalStorageLocation externalStorageLocation =
+            payloadStorage.getLocation(
+                ExternalPayloadStorage.Operation.READ, payloadType, path);
+        try (InputStream inputStream = payloadStorage.download(externalStorageLocation.getUri())) {
+            return objectMapper.readValue(inputStream, Map.class);
+        } catch (IOException e) {
+            String errorMsg =
+                String.format(
+                    "Unable to download payload from external storage location: %s", path);
+            LOGGER.error(errorMsg, e);
+            throw new ConductorClientException(errorMsg, e);
+        }
     }
 
     @Override
